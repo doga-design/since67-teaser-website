@@ -1,0 +1,739 @@
+@font-face {
+  font-family: "Geist Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 300;
+  src: url("./assets/fonts/geist/geist-sans-latin-300-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Geist Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("./assets/fonts/geist/geist-sans-latin-600-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Geist Sans";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("./assets/fonts/geist/geist-sans-latin-700-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Dharma Gothic E";
+  src: url("./assets/fonts/DharmaGothicE-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@property --bg-grad-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 159.5deg;
+}
+
+@keyframes poster-bg-gradient-orbit {
+  from {
+    --bg-grad-angle: 159.5deg;
+  }
+  to {
+    /* +360° == same line direction → seamless loop */
+    --bg-grad-angle: 519.5deg;
+  }
+}
+
+:root {
+  color-scheme: dark;
+  --ink: rgb(0, 5, 14);
+  --glow: rgb(0, 86, 255);
+  --white: #ffffff;
+  --shadow-cta: 0 4px 2px rgba(0, 0, 0, 0.25);
+  --font-display: "Dharma Gothic E", "Bebas Neue", "Arial Narrow", system-ui, sans-serif;
+  --font-body: "Geist Sans", system-ui, sans-serif;
+  --space-stack: clamp(1rem, 0.65rem + 1.2vw, 1.625rem);
+  --space-tight: clamp(0.25rem, 0.15rem + 0.35vw, 0.375rem);
+  --content-pad-x: clamp(1.25rem, 4vw, 2.5rem);
+
+  /*
+   * CTA button — tweak hover + idle here (no need to hunt in the file).
+   * Hover: higher --cta-hover-steps = smoother; lower = chunkier.
+   * Idle: hold–snap keyframes + linear; lower --cta-idle-amp = subtler; longer --cta-idle-duration = slower.
+   */
+  --cta-hover-duration: 180ms;
+  --cta-hover-steps: 3;
+  --cta-hover-skew-from: 0.16deg;
+  --cta-hover-skew-to: -0.18deg;
+  --cta-hover-fill-contrast: 1.04;
+
+  --cta-idle-duration: 2.55s;
+  /* 0 = still; 1 = full jitter (keyframes below use peaks × this) */
+  --cta-idle-amp: 0.36;
+
+  /*
+   * Copy + logo idle grunge — each has its own timing/pattern (does not affect BG layers).
+   * Hold–snap keyframes + linear (no steps()); *-amp scales peaks; longer *-dur = slower / calmer.
+   */
+  --idle-logo-amp: 0.58;
+  --idle-logo-dur: 2.45s;
+  --idle-logo-delay: -0.52s;
+
+  --idle-headline-amp: 0.5;
+  --idle-headline-dur: 3.15s;
+  --idle-headline-delay: -1.05s;
+
+  --idle-lead-amp: 0.55;
+  --idle-lead-dur: 1.88s;
+  --idle-lead-delay: -0.28s;
+
+  --idle-body-amp: 0.58;
+  --idle-body-dur: 2.7s;
+  --idle-body-delay: -0.82s;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--ink);
+}
+
+body.is-pre-screening {
+  overflow: hidden;
+}
+
+body.is-intro-playing {
+  overflow: hidden;
+  cursor: none;
+}
+
+body.is-intro-playing * {
+  cursor: none !important;
+}
+
+.poster {
+  position: relative;
+  min-height: 100dvh;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--content-pad-x);
+  padding-bottom: max(var(--content-pad-x), env(safe-area-inset-bottom));
+  overflow: hidden;
+  background: var(--ink);
+}
+
+/* Figma base angle 159.5°; slow orbit for smooth, seamless loop (see @property + keyframes above) */
+.poster__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  --bg-grad-angle: 159.5deg;
+  background: linear-gradient(var(--bg-grad-angle), var(--ink) 42.2%, var(--glow) 131.9%);
+  animation: poster-bg-gradient-orbit 56s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poster__bg {
+    animation: none;
+    --bg-grad-angle: 159.5deg;
+  }
+}
+
+/* Bottom-centre glow to lift the blue ice read */
+.poster__bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(60% 55% at 50% 100%, rgba(0, 86, 255, 0.55), transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+/* Blue brush — bundled URL so textures ship with the build; overlay on gradient */
+.poster__texture--blue {
+  position: absolute;
+  inset: -35% -20% -25%;
+  z-index: 1;
+  mix-blend-mode: overlay;
+  background-color: transparent;
+  background-image: url("./assets/blue-brush-texture.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* Overlay on very dark blue can look “invisible”; lift luminance before blending */
+  filter: brightness(1.22) contrast(1.06);
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+/* Scratch — above brush; soft-light */
+.poster__texture--scratches {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  mix-blend-mode: soft-light;
+  background-color: transparent;
+  background-image: url("./assets/scratch-texture.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: contrast(1.05);
+  pointer-events: none;
+  transform: translateZ(0);
+}
+
+/*
+  Dirt FX: mostly black + bright scratches. Pure overlay on dark blue vanishes,
+  so we lift luma/contrast on the wrapper first, then blend with overlay.
+*/
+.poster__dirt-video-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  mix-blend-mode: soft-light;
+  opacity: 0.80;
+  background-image: url("./assets/dirt-fx-poster.jpg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  filter: brightness(6) contrast(3.35);
+  pointer-events: none;
+  transform: translateZ(0);
+  overflow: hidden;
+}
+
+.poster__dirt-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+}
+
+.poster__vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  background: radial-gradient(70% 60% at 50% 35%, transparent 32%, rgba(0, 0, 0, 0.38) 100%);
+  pointer-events: none;
+}
+
+.poster__content {
+  position: relative;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-stack);
+  width: min(352px, 100%);
+  text-align: center;
+}
+
+.pre-screen__content {
+  width: min(324px, 100%);
+}
+
+.poster__brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-tight);
+  width: 100%;
+}
+
+.poster__logo-wrap {
+  margin: 0;
+  display: block;
+  width: min(210px, 56vw);
+  line-height: 0;
+  will-change: transform;
+  animation: poster-idle-logo var(--idle-logo-dur) linear infinite;
+  animation-delay: var(--idle-logo-delay);
+}
+
+#main-site .poster__logo-wrap {
+  margin-left: -18px;
+}
+
+.poster__logo {
+  display: block;
+  width: 100%;
+  height: auto;
+  mix-blend-mode: screen;
+  filter: contrast(1.05) saturate(0.95);
+}
+
+.pre-screen__icon-wrap {
+  width: min(72px, 22vw);
+}
+
+.pre-screen__icon {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.poster__headline {
+  margin: clamp(0.35rem, 0.2rem + 0.6vw, 0.5rem) 0 0;
+  max-width: 22ch;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.25rem, 5.5vw + 0.95rem, 3.75rem);
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: var(--white);
+  will-change: transform;
+  animation: poster-idle-headline var(--idle-headline-dur) linear infinite;
+  animation-delay: var(--idle-headline-delay);
+}
+
+.poster__lead {
+  margin: clamp(0.65rem, 0.45rem + 0.8vw, 0.85rem) 0 0;
+  max-width: 20ch;
+  font-weight: 600;
+  font-size: clamp(1rem, 0.92rem + 0.35vw, 1.125rem);
+  line-height: 1.2;
+  color: var(--white);
+  will-change: transform;
+  animation: poster-idle-lead var(--idle-lead-dur) linear infinite;
+  animation-delay: var(--idle-lead-delay);
+}
+
+.pre-screen__headline {
+  margin-top: clamp(0.45rem, 0.3rem + 0.5vw, 0.625rem);
+}
+
+.poster__body {
+  margin: clamp(0.35rem, 0.2rem + 0.5vw, 0.5rem) 0 0;
+  max-width: 292px;
+  width: 100%;
+  font-weight: 300;
+  font-size: clamp(0.8125rem, 0.78rem + 0.2vw, 0.875rem);
+  line-height: 1.35;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.92);
+  will-change: transform;
+  animation: poster-idle-body var(--idle-body-dur) linear infinite;
+  animation-delay: var(--idle-body-delay);
+}
+
+.pre-screen__body {
+  max-width: 26ch;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* ---- Idle grunge: logo — hold–snap poses (linear), subtle vertical bob ---- */
+@keyframes poster-idle-logo {
+  0%,
+  9%,
+  93.01%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  9.01%,
+  22% {
+    transform: translate3d(calc(0.55px * var(--idle-logo-amp)), calc(-1.35px * var(--idle-logo-amp)), 0)
+      rotate(calc(0.14deg * var(--idle-logo-amp)));
+  }
+  22.01%,
+  35% {
+    transform: translate3d(calc(-0.75px * var(--idle-logo-amp)), calc(1.1px * var(--idle-logo-amp)), 0)
+      rotate(calc(-0.17deg * var(--idle-logo-amp)));
+  }
+  35.01%,
+  48% {
+    transform: translate3d(calc(0.85px * var(--idle-logo-amp)), calc(0.95px * var(--idle-logo-amp)), 0)
+      rotate(calc(0.11deg * var(--idle-logo-amp)));
+  }
+  48.01%,
+  61% {
+    transform: translate3d(calc(-0.65px * var(--idle-logo-amp)), calc(-1.15px * var(--idle-logo-amp)), 0)
+      rotate(calc(-0.15deg * var(--idle-logo-amp)));
+  }
+  61.01%,
+  74% {
+    transform: translate3d(calc(0.7px * var(--idle-logo-amp)), calc(-0.9px * var(--idle-logo-amp)), 0)
+      rotate(calc(0.13deg * var(--idle-logo-amp)));
+  }
+  74.01%,
+  87% {
+    transform: translate3d(calc(-0.5px * var(--idle-logo-amp)), calc(0.8px * var(--idle-logo-amp)), 0)
+      rotate(calc(-0.1deg * var(--idle-logo-amp)));
+  }
+  87.01%,
+  93% {
+    transform: translate3d(calc(0.35px * var(--idle-logo-amp)), calc(-0.45px * var(--idle-logo-amp)), 0)
+      rotate(calc(0.07deg * var(--idle-logo-amp)));
+  }
+}
+
+/* ---- Idle grunge: headline — horizontal snap, low amplitude ---- */
+@keyframes poster-idle-headline {
+  0%,
+  8%,
+  92.01%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  8.01%,
+  26% {
+    transform: translate3d(calc(1.35px * var(--idle-headline-amp)), calc(0.2px * var(--idle-headline-amp)), 0)
+      rotate(calc(-0.12deg * var(--idle-headline-amp)));
+  }
+  26.01%,
+  44% {
+    transform: translate3d(calc(-1.5px * var(--idle-headline-amp)), calc(-0.35px * var(--idle-headline-amp)), 0)
+      rotate(calc(0.14deg * var(--idle-headline-amp)));
+  }
+  44.01%,
+  62% {
+    transform: translate3d(calc(1.15px * var(--idle-headline-amp)), calc(0.45px * var(--idle-headline-amp)), 0)
+      rotate(calc(-0.1deg * var(--idle-headline-amp)));
+  }
+  62.01%,
+  80% {
+    transform: translate3d(calc(-1.65px * var(--idle-headline-amp)), calc(0.15px * var(--idle-headline-amp)), 0)
+      rotate(calc(0.12deg * var(--idle-headline-amp)));
+  }
+  80.01%,
+  92% {
+    transform: translate3d(calc(0.85px * var(--idle-headline-amp)), calc(-0.4px * var(--idle-headline-amp)), 0)
+      rotate(calc(-0.09deg * var(--idle-headline-amp)));
+  }
+}
+
+/* ---- Idle grunge: lead — fastest loop, sharper angle ticks ---- */
+@keyframes poster-idle-lead {
+  0%,
+  6%,
+  94.01%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  6.01%,
+  19% {
+    transform: translate3d(calc(-1.15px * var(--idle-lead-amp)), calc(0.55px * var(--idle-lead-amp)), 0)
+      rotate(calc(0.22deg * var(--idle-lead-amp)));
+  }
+  19.01%,
+  32% {
+    transform: translate3d(calc(1.25px * var(--idle-lead-amp)), calc(-0.75px * var(--idle-lead-amp)), 0)
+      rotate(calc(-0.24deg * var(--idle-lead-amp)));
+  }
+  32.01%,
+  45% {
+    transform: translate3d(calc(-0.95px * var(--idle-lead-amp)), calc(-0.95px * var(--idle-lead-amp)), 0)
+      rotate(calc(0.16deg * var(--idle-lead-amp)));
+  }
+  45.01%,
+  58% {
+    transform: translate3d(calc(1.2px * var(--idle-lead-amp)), calc(0.65px * var(--idle-lead-amp)), 0)
+      rotate(calc(-0.18deg * var(--idle-lead-amp)));
+  }
+  58.01%,
+  71% {
+    transform: translate3d(calc(-1.35px * var(--idle-lead-amp)), calc(0.45px * var(--idle-lead-amp)), 0)
+      rotate(calc(0.2deg * var(--idle-lead-amp)));
+  }
+  71.01%,
+  84% {
+    transform: translate3d(calc(0.75px * var(--idle-lead-amp)), calc(-1.05px * var(--idle-lead-amp)), 0)
+      rotate(calc(-0.14deg * var(--idle-lead-amp)));
+  }
+  84.01%,
+  94% {
+    transform: translate3d(calc(-0.65px * var(--idle-lead-amp)), calc(0.75px * var(--idle-lead-amp)), 0)
+      rotate(calc(0.12deg * var(--idle-lead-amp)));
+  }
+}
+
+/* ---- Idle grunge: body — diagonal holds, small jumps ---- */
+@keyframes poster-idle-body {
+  0%,
+  9%,
+  91.01%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  9.01%,
+  24% {
+    transform: translate3d(calc(1.05px * var(--idle-body-amp)), calc(0.85px * var(--idle-body-amp)), 0)
+      rotate(calc(-0.14deg * var(--idle-body-amp)));
+  }
+  24.01%,
+  39% {
+    transform: translate3d(calc(-1.2px * var(--idle-body-amp)), calc(0.45px * var(--idle-body-amp)), 0)
+      rotate(calc(0.16deg * var(--idle-body-amp)));
+  }
+  39.01%,
+  54% {
+    transform: translate3d(calc(0.85px * var(--idle-body-amp)), calc(-1.1px * var(--idle-body-amp)), 0)
+      rotate(calc(-0.12deg * var(--idle-body-amp)));
+  }
+  54.01%,
+  69% {
+    transform: translate3d(calc(-0.95px * var(--idle-body-amp)), calc(-0.7px * var(--idle-body-amp)), 0)
+      rotate(calc(0.13deg * var(--idle-body-amp)));
+  }
+  69.01%,
+  84% {
+    transform: translate3d(calc(1.25px * var(--idle-body-amp)), calc(0.35px * var(--idle-body-amp)), 0)
+      rotate(calc(-0.11deg * var(--idle-body-amp)));
+  }
+  84.01%,
+  91% {
+    transform: translate3d(calc(-0.65px * var(--idle-body-amp)), calc(0.8px * var(--idle-body-amp)), 0)
+      rotate(calc(0.1deg * var(--idle-body-amp)));
+  }
+}
+
+/* Idle: CTA — same hold–snap treatment; peaks × --cta-idle-amp */
+@keyframes poster-cta-idle-grunge {
+  0%,
+  7%,
+  93.01%,
+  100% {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  7.01%,
+  23% {
+    transform: translate3d(calc(1.15px * var(--cta-idle-amp)), calc(-0.75px * var(--cta-idle-amp)), 0)
+      rotate(calc(-0.16deg * var(--cta-idle-amp)));
+  }
+  23.01%,
+  39% {
+    transform: translate3d(calc(-1.05px * var(--cta-idle-amp)), calc(0.7px * var(--cta-idle-amp)), 0)
+      rotate(calc(0.17deg * var(--cta-idle-amp)));
+  }
+  39.01%,
+  55% {
+    transform: translate3d(calc(0.85px * var(--cta-idle-amp)), calc(0.85px * var(--cta-idle-amp)), 0)
+      rotate(calc(-0.12deg * var(--cta-idle-amp)));
+  }
+  55.01%,
+  71% {
+    transform: translate3d(calc(-1.2px * var(--cta-idle-amp)), calc(-0.65px * var(--cta-idle-amp)), 0)
+      rotate(calc(0.15deg * var(--cta-idle-amp)));
+  }
+  71.01%,
+  87% {
+    transform: translate3d(calc(0.75px * var(--cta-idle-amp)), calc(-0.95px * var(--cta-idle-amp)), 0)
+      rotate(calc(-0.14deg * var(--cta-idle-amp)));
+  }
+  87.01%,
+  93% {
+    transform: translate3d(calc(-0.65px * var(--cta-idle-amp)), calc(0.55px * var(--cta-idle-amp)), 0)
+      rotate(calc(0.11deg * var(--cta-idle-amp)));
+  }
+}
+
+.poster__cta {
+  position: relative;
+  isolation: isolate;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: min(275px, 100%);
+  min-height: 60px;
+  padding: 10px 14px;
+  border: 1px solid #000;
+  background: transparent;
+  color: #000;
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: clamp(0.875rem, 0.82rem + 0.2vw, 0.9375rem);
+  text-decoration: none;
+  box-shadow: var(--shadow-cta);
+  overflow: hidden;
+  will-change: transform;
+  animation: poster-cta-idle-grunge var(--cta-idle-duration) linear infinite;
+}
+
+button.poster__cta {
+  cursor: pointer;
+}
+
+/* White base — shows on the right until the hover sweep covers it */
+.poster__cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #fff;
+  transition: background-color 220ms steps(5);
+}
+
+/* Desktop hover: black → navy; skew + chunky steps = grungy slide */
+.poster__cta::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  transform: scaleX(0) skewX(var(--cta-hover-skew-from));
+  transform-origin: left center;
+  background: linear-gradient(90deg, #000e23 0%, var(--ink) 52%, #001f4d 90%, #002864 100%);
+  transition: transform var(--cta-hover-duration) steps(var(--cta-hover-steps), jump-end);
+  filter: contrast(var(--cta-hover-fill-contrast));
+}
+
+.poster__cta--screener {
+  border-color: rgba(255, 255, 255, 0.85);
+  color: #fff;
+  appearance: none;
+}
+
+.poster__cta--screener::after {
+  background: transparent;
+}
+
+.poster__cta--screener::before {
+  background: #fff;
+}
+
+.poster__cta--screener .poster__cta-arrow {
+  filter: brightness(0) invert(1);
+}
+
+.poster__cta-inner {
+  position: relative;
+  z-index: 2;
+  display: inline;
+  transition: color var(--cta-hover-duration) steps(var(--cta-hover-steps), jump-end);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .poster__cta:hover {
+    animation: none;
+    transform: translate3d(0, 0, 0) rotate(0deg);
+    border-color: #000;
+  }
+
+  .poster__cta:hover::before {
+    transform: scaleX(1) skewX(var(--cta-hover-skew-to));
+  }
+
+  .poster__cta:hover .poster__cta-inner {
+    color: #fff;
+  }
+
+  .poster__cta:hover .poster__cta-arrow {
+    filter: brightness(0) invert(1);
+  }
+
+  .poster__cta--screener:hover {
+    border-color: #fff;
+  }
+
+  .poster__cta--screener:hover .poster__cta-inner {
+    color: #000;
+  }
+
+  .poster__cta--screener:hover .poster__cta-arrow {
+    filter: none;
+  }
+}
+
+.poster__cta:active {
+  animation: none;
+  transform: translateY(1px);
+  transition: none;
+}
+
+.poster__cta:active::after {
+  background-color: #000;
+  transition: none;
+}
+
+.poster__cta:active::before {
+  transform: scaleX(0) skewX(0deg);
+  transition: none;
+}
+
+.poster__cta:active .poster__cta-inner {
+  color: #fff;
+  transition: none;
+}
+
+.poster__cta:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.poster__cta-arrow {
+  display: inline-block;
+  margin-left: 0.25em;
+  width: 0.92em;
+  height: 0.92em;
+  vertical-align: -0.1em;
+  object-fit: contain;
+}
+
+.poster__cta:active .poster__cta-arrow {
+  filter: brightness(0) invert(1);
+}
+
+.intro-video-stage {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: #000;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.intro-video-stage.is-active {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.intro-video-stage__video {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .poster__logo-wrap,
+  .poster__headline,
+  .poster__lead,
+  .poster__body,
+  .poster__cta {
+    animation: none;
+  }
+
+  .poster__cta::before,
+  .poster__cta::after,
+  .poster__cta-inner {
+    transition: none;
+  }
+
+  .poster__cta:active {
+    transform: none;
+  }
+}

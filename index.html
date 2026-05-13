@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Campaign still in construction. Join the wait for the Since 67 campaign."
+    />
+    <title>Since 67</title>
+    <link rel="stylesheet" href="%BASE_URL%src/styles.css" />
+  </head>
+  <body>
+    <section class="poster pre-screen" id="pre-screen" aria-label="Audio notice">
+      <div class="poster__bg" aria-hidden="true"></div>
+      <div class="poster__texture poster__texture--blue" aria-hidden="true"></div>
+      <div class="poster__texture poster__texture--scratches" aria-hidden="true"></div>
+      <div class="poster__vignette" aria-hidden="true"></div>
+      <div class="poster__dirt-video-wrap" aria-hidden="true">
+        <video
+          class="poster__dirt-video"
+          src="%BASE_URL%public/assets/dirt-fx.mp4"
+          poster="%BASE_URL%public/assets/dirt-fx-poster.jpg"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          disablepictureinpicture
+          disableremoteplayback
+        ></video>
+      </div>
+
+      <div class="poster__content pre-screen__content">
+        <div class="poster__brand">
+          <div class="poster__logo-wrap pre-screen__icon-wrap">
+            <img
+              class="pre-screen__icon"
+              src="%BASE_URL%public/assets/headset-icon.png"
+              alt=""
+              width="72"
+              height="72"
+              decoding="async"
+            />
+          </div>
+
+          <h1 class="poster__lead pre-screen__headline">This site has audio.</h1>
+          <p class="poster__body pre-screen__body">
+            We recommend you turn your sound on for a better experience.
+          </p>
+        </div>
+
+        <button class="poster__cta poster__cta--screener" id="pre-screen-cta" type="button">
+          <span class="poster__cta-inner">Got it <img class="poster__cta-arrow" src="%BASE_URL%public/assets/cta-arrow-ne.png" alt="" width="18" height="18" decoding="async" /></span>
+        </button>
+      </div>
+    </section>
+
+    <div class="intro-video-stage" id="intro-video-stage" aria-hidden="true">
+      <video
+        id="intro-video"
+        class="intro-video-stage__video"
+        src="%BASE_URL%public/assets/website-intro-video.mp4"
+        preload="auto"
+        playsinline
+        disablepictureinpicture
+        disableremoteplayback
+      ></video>
+    </div>
+
+    <main class="poster" id="main-site" aria-label="Waitlist" hidden>
+      <div class="poster__bg" aria-hidden="true"></div>
+      <div class="poster__texture poster__texture--blue" aria-hidden="true"></div>
+      <div class="poster__texture poster__texture--scratches" aria-hidden="true"></div>
+      <div class="poster__vignette" aria-hidden="true"></div>
+      <div class="poster__dirt-video-wrap" aria-hidden="true">
+        <video
+          id="dirt-video"
+          class="poster__dirt-video"
+          src="%BASE_URL%public/assets/dirt-fx.mp4"
+          poster="%BASE_URL%public/assets/dirt-fx-poster.jpg"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          disablepictureinpicture
+          disableremoteplayback
+        ></video>
+      </div>
+
+      <div class="poster__content">
+        <div class="poster__brand">
+          <!-- Vite serves `public/` at site root: `public/public/assets/*` → URL `/public/assets/*` -->
+          <div class="poster__logo-wrap">
+            <img
+              class="poster__logo"
+              src="%BASE_URL%public/assets/3d-logo.png"
+              alt="Toronto Maple Leafs"
+              width="210"
+              height="219"
+              decoding="async"
+              onerror="this.onerror=null;this.src='%BASE_URL%public/assets/logo-fallback.svg'"
+            />
+          </div>
+
+          <h1 class="poster__headline">Campaign still in construction.</h1>
+          <p class="poster__lead">Join the wait.</p>
+          <p class="poster__body">
+            In the meantime, leave your Leafs memory on the Wall of Love. Your name will be included in the
+            campaign when it launches.
+          </p>
+        </div>
+
+        <a class="poster__cta" href="https://walloflove.since67.ca/" id="wall-link">
+          <span class="poster__cta-inner">Sure, redirect me to that <img class="poster__cta-arrow" src="%BASE_URL%public/assets/cta-arrow-ne.png" alt="" width="18" height="18" decoding="async" /></span>
+        </a>
+      </div>
+    </main>
+    <script type="module" src="%BASE_URL%src/main.ts"></script>
+  </body>
+</html>
