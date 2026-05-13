@@ -9,7 +9,7 @@ if (link) {
   link.href = wallUrl;
 }
 
-const publicAsset = (path: string) => `${import.meta.env.BASE_URL}${path.replace(/^\//, "")}`;
+const publicAsset = (path: string) => new URL(path.replace(/^\/+/, ""), document.baseURI).href;
 
 const THEME_LOOP_URL = publicAsset("public/assets/theme-loop.mp3");
 
@@ -131,8 +131,20 @@ if (preScreen && preScreenCta && introStage && introVideo && mainSite) {
   introVideo.preload = "auto";
   introVideo.load();
   let introStarted = false;
+  let mainRevealed = false;
+  let introEndFallbackTimer: number | undefined;
+
+  const clearIntroEndFallback = () => {
+    if (introEndFallbackTimer !== undefined) {
+      window.clearTimeout(introEndFallbackTimer);
+      introEndFallbackTimer = undefined;
+    }
+  };
 
   const revealMainSite = () => {
+    if (mainRevealed) return;
+    mainRevealed = true;
+    clearIntroEndFallback();
     introStage.classList.remove("is-active");
     introStage.setAttribute("aria-hidden", "true");
     introVideo.pause();
@@ -140,6 +152,13 @@ if (preScreen && preScreenCta && introStage && introVideo && mainSite) {
     mainSite.hidden = false;
     document.body.classList.remove("is-pre-screening", "is-intro-playing");
     seamlessTheme.bringToFullVolume();
+  };
+
+  const armIntroEndFallback = () => {
+    clearIntroEndFallback();
+    if (Number.isFinite(introVideo.duration) && introVideo.duration > 0) {
+      introEndFallbackTimer = window.setTimeout(revealMainSite, (introVideo.duration + 1) * 1000);
+    }
   };
 
   const playIntro = () => {
@@ -163,14 +182,19 @@ if (preScreen && preScreenCta && introStage && introVideo && mainSite) {
       .then(() => {
         introVideo.muted = false;
         introVideo.volume = 1;
+        armIntroEndFallback();
       })
       .catch(() => {
-        introStarted = false;
+        revealMainSite();
       });
   };
 
   preScreenCta.addEventListener("click", playIntro);
   introVideo.addEventListener("ended", revealMainSite);
+  introVideo.addEventListener("error", revealMainSite);
+  introVideo.addEventListener("loadedmetadata", () => {
+    if (introStarted) armIntroEndFallback();
+  });
 }
 
 const dirtVideos = document.querySelectorAll<HTMLVideoElement>("#dirt-video, .poster__dirt-video");

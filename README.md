@@ -24,7 +24,9 @@ npm run dev
 npm run build
 ```
 
-Output is written to `dist/`. Preview locally:
+Deploy the generated `dist/` folder only. Do not deploy the raw source `index.html`; it contains Vite dev entry paths that are compiled during `npm run build`.
+
+Preview the built production output locally:
 
 ```bash
 npm run preview
@@ -38,6 +40,14 @@ Copy `.env.example` to `.env` or `.env.production` and adjust as needed.
 |----------|---------|
 | `VITE_WALL_OF_LOVE_URL` | Optional override for the Wall of Love CTA URL. If unset, the app uses the default production URL. |
 | `VITE_BASE_PATH` | Optional Vite [`base`](https://vitejs.dev/config/shared-options.html#base). Defaults to `./`, which works for GitHub Pages project sites and most static hosts. Use `/` only for root-domain deploys that require root-absolute asset URLs. |
+
+## Deployment
+
+1. Run `npm ci`.
+2. Run `npm run build`.
+3. Upload the contents of `dist/` to the host.
+
+For GitHub Pages project sites, the default `VITE_BASE_PATH=./` is intended to work without extra configuration.
 
 ## GitHub Actions
 
