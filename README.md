@@ -37,7 +37,7 @@ Copy `.env.example` to `.env` or `.env.production` and adjust as needed.
 | Variable | Purpose |
 |----------|---------|
 | `VITE_WALL_OF_LOVE_URL` | Optional override for the Wall of Love CTA URL. If unset, the app uses the default production URL. |
-| `VITE_BASE_PATH` | Vite [`base`](https://vitejs.dev/config/shared-options.html#base) for non-root deploys. Examples: `/` (default), `/my-repo/` for a GitHub Pages project site at `https://<user>.github.io/my-repo/`. Prefer a path-style base over `./` unless you specifically need relative URLs. |
+| `VITE_BASE_PATH` | Optional Vite [`base`](https://vitejs.dev/config/shared-options.html#base). Defaults to `./`, which works for GitHub Pages project sites and most static hosts. Use `/` only for root-domain deploys that require root-absolute asset URLs. |
 
 ## GitHub Actions
 

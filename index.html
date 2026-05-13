@@ -8,7 +8,7 @@
       content="Campaign still in construction. Join the wait for the Since 67 campaign."
     />
     <title>Since 67</title>
-    <link rel="stylesheet" href="%BASE_URL%src/styles.css" />
+    <link rel="stylesheet" href="./src/styles.css" />
   </head>
   <body>
     <section class="poster pre-screen" id="pre-screen" aria-label="Audio notice">
@@ -19,8 +19,8 @@
       <div class="poster__dirt-video-wrap" aria-hidden="true">
         <video
           class="poster__dirt-video"
-          src="%BASE_URL%public/assets/dirt-fx.mp4"
-          poster="%BASE_URL%public/assets/dirt-fx-poster.jpg"
+          src="./public/assets/dirt-fx.mp4"
+          poster="./public/assets/dirt-fx-poster.jpg"
           autoplay
           muted
           loop
@@ -36,7 +36,7 @@
           <div class="poster__logo-wrap pre-screen__icon-wrap">
             <img
               class="pre-screen__icon"
-              src="%BASE_URL%public/assets/headset-icon.png"
+              src="./public/assets/headset-icon.png"
               alt=""
               width="72"
               height="72"
@@ -51,7 +51,7 @@
         </div>
 
         <button class="poster__cta poster__cta--screener" id="pre-screen-cta" type="button">
-          <span class="poster__cta-inner">Got it <img class="poster__cta-arrow" src="%BASE_URL%public/assets/cta-arrow-ne.png" alt="" width="18" height="18" decoding="async" /></span>
+          <span class="poster__cta-inner">Got it <img class="poster__cta-arrow" src="./public/assets/cta-arrow-ne.png" alt="" width="18" height="18" decoding="async" /></span>
         </button>
       </div>
     </section>
@@ -60,7 +60,7 @@
       <video
         id="intro-video"
         class="intro-video-stage__video"
-        src="%BASE_URL%public/assets/website-intro-video.mp4"
+        src="./public/assets/website-intro-video.mp4"
         preload="auto"
         playsinline
         disablepictureinpicture
@@ -77,8 +77,8 @@
         <video
           id="dirt-video"
           class="poster__dirt-video"
-          src="%BASE_URL%public/assets/dirt-fx.mp4"
-          poster="%BASE_URL%public/assets/dirt-fx-poster.jpg"
+          src="./public/assets/dirt-fx.mp4"
+          poster="./public/assets/dirt-fx-poster.jpg"
           autoplay
           muted
           loop
@@ -91,16 +91,15 @@
 
       <div class="poster__content">
         <div class="poster__brand">
-          <!-- Vite serves `public/` at site root: `public/public/assets/*` → URL `/public/assets/*` -->
           <div class="poster__logo-wrap">
             <img
               class="poster__logo"
-              src="%BASE_URL%public/assets/3d-logo.png"
+              src="./public/assets/3d-logo.png"
               alt="Toronto Maple Leafs"
               width="210"
               height="219"
               decoding="async"
-              onerror="this.onerror=null;this.src='%BASE_URL%public/assets/logo-fallback.svg'"
+              onerror="this.onerror=null;this.src='./public/assets/logo-fallback.svg'"
             />
           </div>
 
@@ -113,10 +112,10 @@
         </div>
 
         <a class="poster__cta" href="https://walloflove.since67.ca/" id="wall-link">
-          <span class="poster__cta-inner">Sure, redirect me to that <img class="poster__cta-arrow" src="%BASE_URL%public/assets/cta-arrow-ne.png" alt="" width="18" height="18" decoding="async" /></span>
+          <span class="poster__cta-inner">Sure, redirect me to that <img class="poster__cta-arrow" src="./public/assets/cta-arrow-ne.png" alt="" width="18" height="18" decoding="async" /></span>
         </a>
       </div>
     </main>
-    <script type="module" src="%BASE_URL%src/main.ts"></script>
+    <script type="module" src="./src/main.ts"></script>
   </body>
 </html>
