@@ -1,58 +1,42 @@
-# Since 67 — teaser site
+# Since 67 — Teaser Website
 
-Static Vite + TypeScript teaser with a pre-screen, intro video, and main poster.
+Static teaser page. No build step. No dependencies.
 
-## Requirements
+## File structure
 
-- Node.js **20+** (see `.nvmrc`)
-
-## Setup
-
-```bash
-npm ci
+```
+/
+├── index.html      — page markup
+├── style.css       — all styles & animations
+├── main.js         — pre-screen flow, intro video, Web Audio loop
+└── assets/
+    ├── fonts/      — Geist Sans (.woff2), Dharma Gothic E (.otf)
+    ├── *.png/svg   — logo, icons, textures
+    ├── dirt-fx.mp4 — background dirt overlay video
+    ├── website-intro-video.mp4   — desktop intro video
+    ├── website-intro-mobile.mp4  — mobile intro video
+    └── theme-loop.mp3            — seamless background audio
 ```
 
 ## Development
 
-```bash
-npm run dev
-```
-
-## Production build
+Serve the root folder with any static file server:
 
 ```bash
-npm run build
+npx serve .
+# or
+python3 -m http.server 5173
 ```
 
-Deploy the generated `dist/` folder only. Do not deploy the raw source `index.html`; it contains Vite dev entry paths that are compiled during `npm run build`.
+Then open [http://localhost:5173](http://localhost:5173).
 
-Preview the built production output locally:
-
-```bash
-npm run preview
-```
-
-## Environment
-
-Copy `.env.example` to `.env` or `.env.production` and adjust as needed.
-
-| Variable | Purpose |
-|----------|---------|
-| `VITE_WALL_OF_LOVE_URL` | Optional override for the Wall of Love CTA URL. If unset, the app uses the default production URL. |
-| `VITE_BASE_PATH` | Optional Vite [`base`](https://vitejs.dev/config/shared-options.html#base). Defaults to `./`, which works for GitHub Pages project sites and most static hosts. Use `/` only for root-domain deploys that require root-absolute asset URLs. |
+> **Note:** The intro video and Web Audio loop require a proper HTTP server — they will not work when opening `index.html` directly from the filesystem (`file://`) due to browser security restrictions.
 
 ## Deployment
 
-1. Run `npm ci`.
-2. Run `npm run build`.
-3. Upload the contents of `dist/` to the host.
+Upload the entire folder (`index.html`, `style.css`, `main.js`, `assets/`) to any static host. No build command needed.
 
-For GitHub Pages project sites, the default `VITE_BASE_PATH=./` is intended to work without extra configuration.
-
-## GitHub Actions
-
-CI runs `npm ci` and `npm run build` on pushes and pull requests to `main` or `master`.
-
-## Large media
-
-Intro videos and other binaries under `public/` can be large. If Git rejects a push, use [Git LFS](https://git-lfs.github.com/) for those assets or host them externally and point URLs accordingly.
+- **Netlify** — drag and drop the folder in the Netlify dashboard
+- **GitHub Pages** — push to `main`, set source to root `/`
+- **Vercel** — import repo, framework preset: *Other*
+- **S3 / CloudFront** — sync the folder contents to your bucket
