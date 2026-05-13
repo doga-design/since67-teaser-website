@@ -254,7 +254,7 @@ video.poster__logo {
 }
 
 .pre-screen__icon-wrap {
-  width: min(72px, 22vw);
+  width: min(60px, 19vw);
 }
 
 .pre-screen__icon {
@@ -531,7 +531,7 @@ video.poster__logo {
   background: transparent;
   color: #000;
   font-family: var(--font-body);
-  font-weight: 500;
+  font-weight: 600;
   font-size: clamp(0.875rem, 0.82rem + 0.2vw, 0.9375rem);
   text-decoration: none;
   box-shadow: var(--shadow-cta);
